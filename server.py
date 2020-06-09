@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 # from util import hash_password, verify_password, add_user
 import util
 import os
-
+#test
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './images'
