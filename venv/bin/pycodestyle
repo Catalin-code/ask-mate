@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/candre/Desktop/codecool/Web and SQL with Python/Web 1st week pair/ask-mate-AndreiStancu98/venv/bin/python3.7" "$0" "$@"
+'''exec' "/home/catalin/Desktop/projects/Web and SQL with Python/Week3/ask-mate-3-python-AndreiStancu98/venv/bin/python3.8" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re

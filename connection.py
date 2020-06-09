@@ -1,4 +1,3 @@
-import os
 import psycopg2
 import psycopg2.extras
 
@@ -7,17 +6,13 @@ connections = {}
 
 
 def get_connection_string():
-    user_name = 'candre'
-    password = ''
+    user_name = 'catalin'
+    password = '123456'
     host = 'localhost'
     database_name = 'test_db'
-    # user_name = os.environ.get('PSQL_USER_NAME')
-    # password = os.environ.get('PSQL_PASSWORD')
-    # host = os.environ.get('PSQL_HOST')
-    # database_name = os.environ.get('PSQL_DB_NAME')
 
-    # env_variables_defined = user_name and password and host and database_name
     env_variables_defined = True
+
     if env_variables_defined:
         return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
             user_name=user_name,
