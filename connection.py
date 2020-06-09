@@ -55,6 +55,9 @@ def close_connection(cursor):
         connection.close()
 
 
+# de aici
+
+
 def open_database():
     try:
         connection_string = get_connection_string()
