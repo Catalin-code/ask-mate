@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from data_manager import Data
-from datetime import datetime
 from werkzeug.utils import secure_filename
 # from util import hash_password, verify_password, add_user
 import util
@@ -261,8 +260,9 @@ def route_register():
         email = request.form['email']
         password = request.form['password']
         hashed_password = util.hash_password(password)
-        date = datetime
-        util.add_user(email, hashed_password, date)
+        # datetime = util.get_current_time()
+        # print(email, password, datetime)
+        util.add_user(email, hashed_password)
         return redirect(url_for('route_index'))
     return render_template('registration.html')
 

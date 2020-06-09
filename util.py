@@ -1,6 +1,8 @@
 from flask_bcrypt import bcrypt
 import connection
 from psycopg2.extras import RealDictCursor
+from datetime import datetime
+from time import time
 
 
 def hash_password(plain_text_password):
@@ -14,10 +16,13 @@ def verify_password(plain_text_password, hashed_password):
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
 
 
+def get_current_time():
+    return datetime.fromtimestamp(int(time())).strftime("%Y-%m-%d %H:%M:%S")
+
+
 @connection.connection_handler
-def add_user(email: str, password: str, date: str, cursor: RealDictCursor) -> list:
-    query = """
-        INSERT INTO user(email, password, date)
-        VALUES ({email}, {password}, {date})
-        """
+def add_user(email: str, password: str, cursor: RealDictCursor) -> list:
+    query = f"""
+        INSERT INTO user(username, password)
+        VALUES ('{email}', '{password}')"""
     cursor.execute(query)
