@@ -22,7 +22,14 @@ def get_current_time():
 
 @connection.connection_handler
 def add_user(cursor, email, password):
-    query = f"""
-        INSERT INTO user (username, password)
-        VALUES('{email}', '{password}'); """
+    query = """
+        INSERT INTO
+            user
+        (username, password)
+        VALUES
+            (%(email)s, %(password)s);
+        """.format(
+            email=email,
+            password=password
+        )
     cursor.execute(query)
