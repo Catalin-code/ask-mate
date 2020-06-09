@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from data_manager import Data
-# from datetime import datetime
+from datetime import datetime
 from werkzeug.utils import secure_filename
+# from util import hash_password, verify_password, add_user
+import util
 import os
 
 
@@ -251,6 +253,18 @@ def route_delete_comment(id):
         question_id = answer['question_id']
     Data.Comment.delete(id)
     return redirect(url_for('route_question', id=question_id))
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def route_register():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        hashed_password = util.hash_password(password)
+        date = datetime
+        util.add_user(email, hashed_password, date)
+        return redirect(url_for('route_index'))
+    return render_template('registration.html')
 
 
 if __name__ == "__main__":
