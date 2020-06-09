@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
 from data_manager import Data
 from werkzeug.utils import secure_filename
 # from util import hash_password, verify_password, add_user
 import util
 import os
-#test
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['UPLOAD_FOLDER'] = './images'
 
 
@@ -117,19 +117,17 @@ def route_image(name):
 
 @app.route("/", methods=['GET', 'POST'])
 def route_index():
-    questions = Data.Question.get()
-    questions = sorted(questions, key=lambda question: question['submission_time'], reverse=True)[:5]
+    if 'username' in session:
+        questions = Data.Question.get()
+        questions = sorted(questions, key=lambda question: question['submission_time'], reverse=True)[:5]
 
-    questions = sorted(
-        questions,
-        key=lambda question: question[request.args.get('order_by', 'submission_time')],
-        reverse=(request.args.get('order_direction', 'desc') == 'desc')
-    )
-
-    if request.method == 'POST':
-        pass
-
-    return render_template('index.html', questions=questions, sort_key=request.args.get('order_by'), sort_order=request.args.get('order_direction'))
+        questions = sorted(
+            questions,
+            key=lambda question: question[request.args.get('order_by', 'submission_time')],
+            reverse=(request.args.get('order_direction', 'desc') == 'desc')
+        )
+        return render_template('index.html', questions=questions, sort_key=request.args.get('order_by'), sort_order=request.args.get('order_direction'))
+    return redirect(url_for('route_login'))
 
 
 @app.route("/list")
@@ -260,11 +258,32 @@ def route_register():
         email = request.form['email']
         password = request.form['password']
         hashed_password = util.hash_password(password)
-        # datetime = util.get_current_time()
-        # print(email, password, datetime)
-        util.add_user(email, hashed_password)
+        datetime = util.get_current_time()
+        util.add_user(email, hashed_password, datetime)
         return redirect(url_for('route_index'))
     return render_template('registration.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def route_login():
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+        # session['password'] = request.form['password']
+
+        return redirect(url_for('route_index'))
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def route_logout():
+    # remove the username from the session if it's there
+    session.pop('username', None)
+    return redirect(url_for('route_index'))
+
+
+@app.route('/users')
+def route_users():
+    return render_template('list_users.html')
 
 
 if __name__ == "__main__":

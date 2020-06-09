@@ -21,15 +21,19 @@ def get_current_time():
 
 
 @connection.connection_handler
-def add_user(cursor, email, password):
-    query = """
-        INSERT INTO
-            user
-        (username, password)
-        VALUES
-            (%(email)s, %(password)s);
-        """.format(
-            email=email,
-            password=password
-        )
+def add_user(cursor, email, password, date):
+    query = f"""
+        INSERT INTO "user" (username, password, date)
+        VALUES ('{email}', '{password}', '{date}')
+
+        """
     cursor.execute(query)
+
+
+@connection.connection_handler
+def list_users():
+    query = f"""
+        SELECT * FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
