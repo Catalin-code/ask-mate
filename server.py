@@ -15,12 +15,14 @@ def route_ask():
     if request.method == 'POST':
         image = request.files.get('image', None)
         img_type = None
+        user_id = session['user_id']
         if image:
             img_type = image.filename.rsplit('.', 1)[1]
         id = Data.Question.add(
             request.form.get('title'),
             request.form.get('message'),
-            img_type
+            img_type,
+            user_id
         )
         if image:
             image.filename = f"question_{id}.{img_type}"
@@ -38,7 +40,8 @@ def route_question_delete(id):
             os.remove(f"{app.config['UPLOAD_FOLDER']}/{question['image']}")
         except OSError as exception:
             print(exception)
-    Data.Question.delete(id)
+    user_id = session['user_id']
+    Data.Question.delete(id, user_id)
     return redirect(url_for('route_list'))
 
 
@@ -83,12 +86,14 @@ def route_post_answer(question_id):
     if request.method == 'POST':
         image = request.files.get('image', None)
         img_type = None
+        user_id = session['user_id']
         if image:
             img_type = image.filename.rsplit('.', 1)[1]
         id = Data.Answer.add(
             question_id,
             request.form.get('answer'),
-            img_type
+            img_type,
+            user_id
         )
         if image:
             image.filename = f"answer_{id}.{img_type}"
@@ -175,7 +180,8 @@ def route_delete_answer(id):
             os.remove(f"{app.config['UPLOAD_FOLDER']}/{answer['image']}")
         except OSError as exception:
             print(exception)
-    Data.Answer.delete(id)
+    user_id = session['user_id']
+    Data.Answer.delete(id, user_id)
     return redirect(url_for('route_question', id=id))
 
 
@@ -184,7 +190,8 @@ def route_question_comment(id):
     question = Data.Question.get(key='id', value=id)
     if request.method == 'POST':
         comment = request.form.get('comment')
-        Data.Comment.add(comment, question_id=id)
+        user_id = session['user_id']
+        Data.Comment.add(comment, user_id=user_id, question_id=id)
         return redirect(url_for('route_question', id=id))
     return render_template('comment-question.html', question=question)
 
@@ -248,7 +255,8 @@ def route_delete_comment(id):
     else:
         answer = Data.Answer.get(key='id', value=comment['answer_id'])
         question_id = answer['question_id']
-    Data.Comment.delete(id)
+    user_id = session['user_id']
+    Data.Comment.delete(id, user_id)
     return redirect(url_for('route_question', id=question_id))
 
 
@@ -268,9 +276,12 @@ def route_register():
 def route_login():
     if request.method == 'POST':
         session['username'] = request.form['username']
-        # session['password'] = request.form['password']
-
-        return redirect(url_for('route_index'))
+        session['password'] = request.form['password']
+        users = util.list_users()
+        for user in users:
+            if user['username'] == session['username'] and util.verify_password(session['password'], user['password']):
+                session['user_id'] = user['user_id']
+                return redirect(url_for('route_index'))
     return render_template('login.html')
 
 
@@ -283,7 +294,8 @@ def route_logout():
 
 @app.route('/users')
 def route_users():
-    return render_template('list_users.html')
+    users_list = util.list_users()
+    return render_template('list_users.html', users_list=users_list)
 
 
 if __name__ == "__main__":
