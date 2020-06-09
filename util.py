@@ -21,8 +21,15 @@ def get_current_time():
 
 
 @connection.connection_handler
-def add_user(email: str, password: str, cursor: RealDictCursor) -> list:
-    query = f"""
-        INSERT INTO user(username, password)
-        VALUES ('{email}', '{password}')"""
+def add_user(cursor, email, password):
+    query = """
+        INSERT INTO
+            user
+        (username, password)
+        VALUES
+            (%(email)s, %(password)s);
+        """.format(
+            email=email,
+            password=password
+        )
     cursor.execute(query)
