@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ 'Edit question' if question else 'New Question' }} | Ask Mate</title>
+
+        <style>
+            body{
+                background-color: gray;
+                color: navy;
+            }
+        </style>        
+    </head>
+    <body>
+        <h1>{{ 'Edit question' if question else 'Add a new question' }}</h1>
+
+        <form id="question_form" action="{{ url_for('route_question_edit', id=question.id) if question else url_for('route_ask') }}" method="POST"
+                enctype="multipart/form-data" style="display: inline;">
+            <label for="title_input">Title</label><br>
+            <input type="text" name="title" id="title_input" form="question_form" required
+                value="{{ question.title if question else '' }}" value="{{ value | replace('\'', '\\\'') | replace('&quot', '\\&quot') | e }}"><br>
+            <label for="message_input">Message</label><br>
+            <textarea name="message" id="message_input" cols="30" rows="10" form="question_form" required>{{ question.message if question else '' }}</textarea><br>
+            <label for="image_input">Image</label><br>
+            <input type="file" name="image" id="image_input" accept="image/png, image/jpg, image/jpeg"><br>
+            <input type="submit" value="{{ 'Edit' if question else 'Ask' }}" form="question_form">
+        </form>
+        {% if question %}
+            <form action="{{ url_for('route_question', id=question.id) }}" method="get" style="display: inline;">
+                <button type="submit">Cancel</button>
+            </form>
+        {% else %}
+            <form action="{{ url_for('route_list') }}" method="get" style="display: inline;">
+                <button type="submit">Cancel</button>
+            </form>
+        {% endif %}
+    </body>
+</html>

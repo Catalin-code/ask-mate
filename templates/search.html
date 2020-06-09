@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Search Results | Ask Mate</title>
+
+        <style>
+            body{
+                background-color: gray;
+                color: navy;
+            }
+        </style>
+    </head>
+    <body>
+
+        <meta id='search-phrase' data-phrase="{{ q }}">
+        <script>
+            function highlight(phrase) {
+                Window.find();
+            }
+
+            var phrase = $('#search-phrase').data('phrase');
+            // document.getElementById('test').innerHTML = phrase;
+            highlight(phrase);
+        </script>
+
+        <!-- <h1 id='test'></h1> -->
+        
+        <h1>Search Results</h1>
+        <h2>Questions</h2>
+        <table>
+            {% for question in questions %}
+                <tr>
+                    <td><a href="{{ url_for('route_question', id=question.id) }}">{{ question.title }}</a></td>
+                    <td>{{ question.message }}</td>
+                    <td>{% if question.image %}<img src="{{ url_for('route_image', name=question.image) }}", width="100px">{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <h2>Answers</h2>
+        <table>
+            {% for answer in answers %}
+                <tr>
+                    <td><a href="{{ url_for('route_question', id=answer.question_id) }}">{{ answer.message }}</a></td>
+                    <td>{% if answer.image %}<img src="{{ url_for('route_image', name=answer.image) }}", width="100px">{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <form action="{{ url_for('route_list') }}" style="display: inline;">
+            <button type="submit">All Questions</button>
+        </form>
+        <form action="{{ url_for('route_index') }}" style="display: inline;">
+            <button type="submit">Back to Home</button>
+        </form>
+    </body>
+</html>

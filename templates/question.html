@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Question {{ question.id }} | Ask Mate</title>
+
+        <style>
+            body{
+                background-color: gray;
+                color: navy;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Title: {{ question.title }}</h1>
+        <h2>Message:</h2>
+        <p>{{ question.message }}</p>
+        
+
+        {% if question.image %}
+            <img src="{{ url_for('route_image', name=question.image) }}", width="450px"><br>
+        {% endif %}
+
+
+        <form action="{{ url_for('route_question_edit', id=question.id) }}" method="get" style="display: inline;">
+            <button type="submit">Edit</button>
+        </form>
+        <form action="{{ url_for('route_question_delete', id=question.id) }}" method="get" style="display: inline;">
+            <button type="submit">Delete</button>
+        </form><br>
+
+
+        <form action="{{ url_for('route_new_tag', id=question.id) }}" method="POST" style="display: inline;">
+            <select id='tags' name='tag' required>
+                <option selected hidden>Tag</option>
+                {% for tag in tags %}
+                <option value={{tag.id}}>{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" value="add" name='type'>Add tag</button>
+        </form>
+        <form action="{{ url_for('route_new_tag', id=question.id) }}" method="POST" style="display: inline;">
+            <input type="text" name="new_tag">
+            <button type="submit" value='new' name='type'>New tag</button>
+        </form><br>
+        <div id='tags'>
+            Tags: 
+            {% for tag in question_tags %}
+                {{tag.name}}
+                <a href="{{ url_for('route_delete_tag', id=question.id, tag_id=tag.id) }}">X</a>
+            {% endfor %}
+        </div>
+
+
+        <h3>Comments</h3>
+        <form action="{{ url_for('route_question_comment', id=question.id) }}" method="get">
+            <button type="submit">Add comment</button>
+        </form>
+        <table>
+            {% for comment in comments  %}
+            <tr>
+                <td>{{ comment.message }}<br></td>
+                <td><form action="{{ url_for('route_edit_comment', id=comment.id) }}" method="GET">
+                        <input type="submit" value="Edit">
+                    </form>
+                </td>
+                <td>
+                    <form action="{{ url_for('route_delete_comment', id=comment.id) }}" method="GET">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
+        <h2>Answers</h2>
+        <form action="{{ url_for('route_post_answer', question_id=question.id) }}" method="get">
+            <input type="submit" value="New Answer">
+        </form>
+        <table>
+            <tr>
+                <th>Votes</th>
+                <th>Message</th>
+                <th>Image</th>
+                <th>Submission_time</th>
+            </tr>
+            {% for answer in answers %}
+                <tr>
+                    <td>{{ answer.vote_number }}</td>
+                    <td>{{ answer.message }}</td>
+                    <td>{% if answer.image %}<img src="{{ url_for('route_image', name=answer.image) }}", width="100px">{% endif %}</td>
+                    <td>{{ answer.submission_time }}</td>
+                    <td>
+                        <form method="get" action="{{ url_for('route_answer_vote_up', id=answer.id) }}" style="display: inline;">
+                            <button type="submit">&uarr;</button>
+                        </form>
+                        <form method="get" action="{{ url_for('route_answer_vote_down', id=answer.id) }}" style="display: inline;">
+                            <button type="submit">&darr;</button>
+
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('route_edit_answer', answer_id=answer.id) }}" method="GET" style="display: inline;">
+                            <input type="submit" value="Edit">
+                        </form>
+                        <form action="{{ url_for('route_delete_answer', id=answer.id) }}" method="GET" style="display: inline;">
+                            <input type="submit" value="Delete">
+                        </form>
+                        <form action="{{ url_for('route_answer_comment', id=answer.id) }}" method="GET" style="display: inline;">
+                            <input type="submit" value="Add comment">
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=5>
+                        <table>
+                        {% for comment in answer_comments[answer.id] %}
+                            <tr>
+                                <td>
+                                    {{comment.message}}
+                                </td>
+                                <td>
+                                    <form action="{{ url_for('route_edit_comment', id=comment.id) }}" method="GET" style="display: inline;">
+                                        <input type="submit" value="Edit">
+                                    </form>
+                                    <form action="{{ url_for('route_delete_comment', id=comment.id) }}" method="GET" style="display: inline;">
+                                        <input type="submit" value="Delete">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <form action="{{ url_for('route_list') }}" method="get">
+            <button type="submit">Back to list</button>
+        </form>
+    </body>
+</html>

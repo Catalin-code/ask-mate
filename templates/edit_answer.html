@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit answer | Ask Mate</title>
+
+        <style>
+            body{
+                background-color: gray;
+                color: navy;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Edit Answer</h1>
+        <form method="POST" action="{{ url_for('route_edit_answer', answer_id=answer.id) }}">
+            <textarea name="message" id="message_input" cols="30" rows="10" required >{{answer.message}}</textarea><br>
+            <button type="submit">Edit</button>
+        </form>
+    </body>
+</html>
