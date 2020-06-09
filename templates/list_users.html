@@ -3,11 +3,26 @@
     <title>List Users</title>
 {% endblock %}
 {% block body %}
-    <div align="center">
-        <form method='post'>
-            <input type="email" name='username'><br>
-            <input type="password" name='password'><br>
-            <button type="submit" class="btn btn-dark">Submit</button><br>
-        </form>
-    </div>
+    <table align="center">
+        <tr align="center">
+        <th>User id</th>
+        <th>User name</th>
+        <th>Registration date</th>
+        <th>Asked questions</th>
+        <th>Answers</th>
+        <th>Comments</th>
+        <th>Reputation</th>
+        </tr>
+        {% for user in users_list %}
+        <tr>
+            <td align="center">{{ user.user_id }}</td>
+            <td align="center">{{ user.username }}</td>
+            <td align="center">{{ user.date }}</td>
+            <td align="center">{{ user.questions }}</td>
+            <td align="center">{{ user.answers }}</td>
+            <td align="center">{{ user.comments }}</td>
+            <td align="center">{{ user.reputation }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

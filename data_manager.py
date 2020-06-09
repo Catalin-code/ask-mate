@@ -30,21 +30,28 @@ class __Data:
             return data[0] if key == 'id' else data
 
         @staticmethod
-        def add(title, message, image):
+        def add(title, message, image, user_id):
             cursor = connection.get_cursor()
             cursor.execute("SELECT nextval('question_id_seq')")
             id = cursor.fetchall()[0]['nextval']
             query = """
-                INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image)
-                VALUES ({id}, '{time}', 0, 0, '{title}', '{message}', '{image}')
+                INSERT INTO question(id, submission_time, view_number, vote_number, title, message, image, user_id)
+                VALUES ({id}, '{time}', 0, 0, '{title}', '{message}', '{image}', {user_id})
             """.format(
                 id=id,
                 time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 title=title,
                 message=message,
-                image=f"question_{id}.{image}" if image else ''
+                image=f"question_{id}.{image}" if image else '',
+                user_id=user_id
             )
             cursor.execute(query)
+            query_for_question_count = f"""
+                UPDATE "user"
+                SET questions = questions + 1
+                WHERE user_id = {user_id}
+                """
+            cursor.execute(query_for_question_count)
             connection.close_connection(cursor)
             return id
 
@@ -67,7 +74,7 @@ class __Data:
             connection.close_connection(cursor)
 
         @staticmethod
-        def delete(id: int):
+        def delete(id: int, user_id):
             cursor = connection.get_cursor()
             query = """
                 DELETE FROM question
@@ -76,6 +83,12 @@ class __Data:
                 id=id
             )
             cursor.execute(query)
+            query_for_question_count_delete = f"""
+                UPDATE "user"
+                SET questions = questions - 1
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_question_count_delete)
             connection.close_connection(cursor)
 
     class __Answer:
@@ -100,21 +113,28 @@ class __Data:
             return data[0] if key == 'id' else data
 
         @staticmethod
-        def add(question_id: int, message, image):
+        def add(question_id: int, message, image, user_id):
             cursor = connection.get_cursor()
             cursor.execute("SELECT nextval('answer_id_seq')")
             id = cursor.fetchall()[0]['nextval']
             query = """
-                INSERT INTO answer(id, submission_time, vote_number, question_id, message, image)
-                VALUES ({id}, '{time}', 0, {question}, '{message}', '{image}')
+                INSERT INTO answer(id, submission_time, vote_number, question_id, message, image, user_id)
+                VALUES ({id}, '{time}', 0, {question}, '{message}', '{image}', '{user_id}')
             """.format(
                 id=id,
                 time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 question=question_id,  # TODO
                 message=message,
-                image=f"answer_{id}.{image}" if image else ''
+                image=f"answer_{id}.{image}" if image else '',
+                user_id=user_id
             )
             cursor.execute(query)
+            query_for_answer_count = f"""
+                UPDATE "user"
+                SET answers = answers + 1
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_answer_count)
             connection.close_connection(cursor)
             return id
 
@@ -135,7 +155,7 @@ class __Data:
             connection.close_connection(cursor)
 
         @staticmethod
-        def delete(id: int):
+        def delete(id: int, user_id):
             cursor = connection.get_cursor()
             query = """
                 DELETE FROM answer
@@ -144,6 +164,12 @@ class __Data:
                 id=id
             )
             cursor.execute(query)
+            query_for_answer_count_delete = f"""
+                UPDATE "user"
+                SET answers = answers - 1
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_answer_count_delete)
             connection.close_connection(cursor)
 
     class __Comment:
@@ -167,22 +193,29 @@ class __Data:
             return data[0] if key == 'id' else data
 
         @staticmethod
-        def add(message, question_id: int = None, answer_id: int = None):
+        def add(message, user_id, question_id: int = None, answer_id: int = None):
             cursor = connection.get_cursor()
             cursor.execute("SELECT nextval('comment_id_seq')")
             id = cursor.fetchall()[0]['nextval']
             query = """
-                INSERT INTO comment(id{id_for}, message, submission_time, edited_count)
-                VALUES ({id}, {question}{answer}, '{message}', '{time}', 0)
+                INSERT INTO comment(id{id_for}, message, submission_time, edited_count, user_id)
+                VALUES ({id}, {question}{answer}, '{message}', '{time}', 0, {user_id})
             """.format(
                 id=id,
                 id_for=f", {'question_id' if question_id != None else 'answer_id' if answer_id != None else ''}",
                 question=question_id if question_id is not None else '',
                 answer=answer_id if answer_id is not None else '',
                 message=message,
-                time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                user_id=user_id
             )
             cursor.execute(query)
+            query_for_comment_count = f"""
+                UPDATE "user"
+                SET comments = comments + 1
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_comment_count)
             connection.close_connection(cursor)
             return id
 
@@ -202,7 +235,7 @@ class __Data:
             connection.close_connection(cursor)
 
         @staticmethod
-        def delete(id: int):
+        def delete(id: int, user_id):
             cursor = connection.get_cursor()
             query = """
                 DELETE FROM comment
@@ -211,6 +244,12 @@ class __Data:
                 id=id
             )
             cursor.execute(query)
+            query_for_comment_count_delete = f"""
+                UPDATE "user"
+                SET comments = comments - 1
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_comment_count_delete)
             connection.close_connection(cursor)
 
     class __Tag:
