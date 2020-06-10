@@ -111,6 +111,7 @@ class __Data:
             data = cursor.fetchall()
             connection.close_connection(cursor)
             return data[0] if key == 'id' else data
+            # return data
 
         @staticmethod
         def add(question_id: int, message, image, user_id):
