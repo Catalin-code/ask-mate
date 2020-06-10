@@ -80,13 +80,19 @@ def get_comments_by_user_id(cursor, user_id):
 
 
 @connection.connection_handler
-def accept_answer(cursor, answer_id):
+def accept_answer(cursor, answer_id, user_id):
     query = f"""
         UPDATE answer
         SET accepted = true
         WHERE id = {answer_id}
     """
     cursor.execute(query)
+    query_for_reputation_gain = f"""
+        UPDATE "user"
+        SET reputation = reputation + 15
+        WHERE user_id = {user_id}
+    """
+    cursor.execute(query_for_reputation_gain)
 
 
 @connection.connection_handler
@@ -97,3 +103,12 @@ def unaccept_answer(cursor, answer_id):
         WHERE id = {answer_id}
     """
     cursor.execute(query)
+
+
+@connection.connection_handler
+def get_tags(cursor):
+    query = """
+        SELECT * FROM tag
+    """
+    cursor.execute(query)
+    return cursor.fetchall()

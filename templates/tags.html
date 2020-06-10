@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Tags</title>
+{% endblock %}
+{% block body %}
+    <table align="center">
+        </tr>
+        {% for tag in tags %}
+        <tr>
+            <td align="center">{{ tag.name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

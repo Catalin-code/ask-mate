@@ -44,7 +44,7 @@
             <button type="submit" value='new' name='type'>New tag</button>
         </form><br>
         <div id='tags'>
-            Tags: 
+            <a href="{{ url_for('route_tags') }}">Tags:</a> 
             {% for tag in question_tags %}
                 {{tag.name}}
                 <a href="{{ url_for('route_delete_tag', id=question.id, tag_id=tag.id) }}">X</a>
@@ -110,10 +110,27 @@
                         <form action="{{ url_for('route_answer_comment', id=answer.id) }}" method="GET" style="display: inline;">
                             <input type="submit" value="Add comment">
                         </form>
-                        <form action="{{ url_for('route_accepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
-                            <input type="submit" value="Accept answer">
-                        </form>
+                        {% if session['user_id'] == question.user_id %}
+                            {% if answer.accepted == false %}
+                                <form action="{{ url_for('route_accepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
+                                    <input type="submit" value="Accept answer">
+                                </form>
+                            {% endif %}
+
+                            {% if answer.accepted == true %}
+                                <form action="{{ url_for('route_unaccepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
+                                    <input type="submit" value="Unaccept answer">
+                                </form>
+                            {% endif %}
+                        {% else %}
+                                {% if answer.accepted == true %}
+                                    Accepted answer
+                                {% endif %}
+                        {% endif %}
+
+                        
                     </td>
+                        
                 </tr>
                 <tr>
                     <td colspan=5>

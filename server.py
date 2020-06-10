@@ -149,26 +149,34 @@ def route_list():
 
 @app.route('/question/<int:id>/vote_up')
 def route_question_vote_up(id):
-    Data.Question.update(id, vote='vote_number + 1')
+    question = Data.Question.get(key='id', value=id)
+    user_id = question['user_id']
+    Data.Question.update(id, user_id, reputation='reputation + 5', vote='vote_number + 1')
     return redirect(url_for('route_list'))
 
 
 @app.route('/question/<int:id>/vote_down')
 def route_question_vote_down(id):
-    Data.Question.update(id, vote='vote_number - 1')
+    question = Data.Question.get(key='id', value=id)
+    user_id = question['user_id']
+    Data.Question.update(id, user_id, reputation='reputation - 2', vote='vote_number - 1')
     return redirect(url_for('route_list'))
 
 
 @app.route('/answer/<int:id>/vote_up')
 def route_answer_vote_up(id):
-    Data.Answer.update(id, vote='vote_number + 1')
+    answer = Data.Answer.get(key='id', value=id)
+    user_id = answer['user_id']
+    Data.Answer.update(id, user_id, reputation='reputation + 10', vote='vote_number + 1')
     question_id = Data.Answer.get(key='id', value=id)['question_id']
     return redirect(url_for('route_question', id=question_id))
 
 
 @app.route('/answer/<int:id>/vote_down')
 def route_answer_vote_down(id):
-    Data.Answer.update(id, vote='vote_number - 1')
+    answer = Data.Answer.get(key='id', value=id)
+    user_id = answer['user_id']
+    Data.Answer.update(id, user_id, reputation='reputation - 2', vote='vote_number - 1')
     question_id = Data.Answer.get(key='id', value=id)['question_id']
     return redirect(url_for('route_question', id=question_id))
 
@@ -176,6 +184,7 @@ def route_answer_vote_down(id):
 @app.route('/answer/<int:id>/delete')
 def route_delete_answer(id):
     answer = Data.Answer.get(key='id', value=id)
+    question_id = answer['question_id']
     if answer['image']:
         try:
             os.remove(f"{app.config['UPLOAD_FOLDER']}/{answer['image']}")
@@ -183,7 +192,7 @@ def route_delete_answer(id):
             print(exception)
     user_id = session['user_id']
     Data.Answer.delete(id, user_id)
-    return redirect(url_for('route_question', id=id))
+    return redirect(url_for('route_question', id=question_id))
 
 
 @app.route('/question/<int:id>/new-comment', methods=['GET', 'POST'])
@@ -310,8 +319,26 @@ def route_user(user_id):
 
 @app.route('/answer/<int:id>/accepted')
 def route_accepted_answer(id):
-    util.accept_answer(id)
-    return redirect(url_for('route_question', id=id))
+    answer = Data.Answer.get(key='id', value=id)
+    user_id = answer['user_id']
+    util.accept_answer(id, user_id)
+    answer2 = Data.Answer.get(key='id', value=id)
+    question_id = answer2['question_id']
+    return redirect(url_for('route_question', id=question_id))
+
+
+@app.route('/answer/<int:id>/unaccepted')
+def route_unaccepted_answer(id):
+    util.unaccept_answer(id)
+    answer = Data.Answer.get(key='id', value=id)
+    question_id = answer['question_id']
+    return redirect(url_for('route_question', id=question_id))
+
+
+@app.route('/tags')
+def route_tags():
+    tags = util.get_tags()
+    return render_template('tags.html', tags=tags)
 
 
 if __name__ == "__main__":

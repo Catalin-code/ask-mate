@@ -56,7 +56,7 @@ class __Data:
             return id
 
         @staticmethod
-        def update(id: int, view=None, vote=None, title=None, message=None, image=None):
+        def update(id: int, user_id, reputation, view=None, vote=None, title=None, message=None, image=None):
             cursor = connection.get_cursor()
             query = """
                 UPDATE question
@@ -71,6 +71,12 @@ class __Data:
                 image=f"image='{image}'" if image else ''
             )
             cursor.execute(query)
+            query_for_reputation_gain = f"""
+                UPDATE "user"
+                SET reputation = {reputation}
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_reputation_gain)
             connection.close_connection(cursor)
 
         @staticmethod
@@ -141,7 +147,7 @@ class __Data:
             return id
 
         @staticmethod
-        def update(id: int, vote=None, message=None, image=None):
+        def update(id: int, user_id, reputation, vote=None, message=None, image=None):
             cursor = connection.get_cursor()
             query = """
                 UPDATE answer
@@ -154,6 +160,12 @@ class __Data:
                 image=f"image='{image}'" if image else ''
             )
             cursor.execute(query)
+            query_for_reputation_gain = f"""
+                UPDATE "user"
+                SET reputation = {reputation}
+                WHERE user_id = {user_id}
+            """
+            cursor.execute(query_for_reputation_gain)
             connection.close_connection(cursor)
 
         @staticmethod
