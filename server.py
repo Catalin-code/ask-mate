@@ -131,7 +131,8 @@ def route_index():
             key=lambda question: question[request.args.get('order_by', 'submission_time')],
             reverse=(request.args.get('order_direction', 'desc') == 'desc')
         )
-        return render_template('index.html', questions=questions, sort_key=request.args.get('order_by'), sort_order=request.args.get('order_direction'))
+        user_id = session['user_id']
+        return render_template('index.html', questions=questions, sort_key=request.args.get('order_by'), sort_order=request.args.get('order_direction'), user_id=user_id)
     return redirect(url_for('route_login'))
 
 
@@ -296,6 +297,13 @@ def route_logout():
 def route_users():
     users_list = util.list_users()
     return render_template('list_users.html', users_list=users_list)
+
+
+@app.route('/user/<user_id>')
+def route_user(user_id):
+    user_id = session['user_id']
+    users_list = util.get_user_by_id(user_id)
+    return render_template('user.html', user_id=user_id, users_list=users_list)
 
 
 if __name__ == "__main__":

@@ -37,3 +37,13 @@ def list_users(cursor):
     """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    query = f"""
+        SELECT * FROM "user"
+        WHERE user_id = {user_id}
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
