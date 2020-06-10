@@ -110,6 +110,9 @@
                         <form action="{{ url_for('route_answer_comment', id=answer.id) }}" method="GET" style="display: inline;">
                             <input type="submit" value="Add comment">
                         </form>
+                        <form action="{{ url_for('route_accepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
+                            <input type="submit" value="Accept answer">
+                        </form>
                     </td>
                 </tr>
                 <tr>

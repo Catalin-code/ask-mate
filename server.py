@@ -301,9 +301,17 @@ def route_users():
 
 @app.route('/user/<user_id>')
 def route_user(user_id):
-    user_id = session['user_id']
     users_list = util.get_user_by_id(user_id)
-    return render_template('user.html', user_id=user_id, users_list=users_list)
+    questions = util.get_questions_by_user_id(user_id)
+    answers = util.get_answers_by_user_id(user_id)
+    comments = util.get_comments_by_user_id(user_id)
+    return render_template('user.html', user_id=user_id, users_list=users_list, questions=questions, answers=answers, comments=comments)
+
+
+@app.route('/answer/<int:id>/accepted')
+def route_accepted_answer(id):
+    util.accept_answer(id)
+    return redirect(url_for('route_question', id=id))
 
 
 if __name__ == "__main__":

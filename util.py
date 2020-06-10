@@ -32,7 +32,7 @@ def add_user(cursor, email, password, date):
 
 @connection.connection_handler
 def list_users(cursor):
-    query = f"""
+    query = """
         SELECT * FROM "user"
     """
     cursor.execute(query)
@@ -47,3 +47,53 @@ def get_user_by_id(cursor, user_id):
     """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    query = f"""
+        SELECT * FROM question
+        WHERE user_id = {user_id}
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_answers_by_user_id(cursor, user_id):
+    query = f"""
+        SELECT * FROM answer
+        WHERE user_id = {user_id}
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_comments_by_user_id(cursor, user_id):
+    query = f"""
+        SELECT * FROM comment
+        WHERE user_id = {user_id}
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def accept_answer(cursor, answer_id):
+    query = f"""
+        UPDATE answer
+        SET accepted = true
+        WHERE id = {answer_id}
+    """
+    cursor.execute(query)
+
+
+@connection.connection_handler
+def unaccept_answer(cursor, answer_id):
+    query = f"""
+        UPDATE answer
+        SET accepted = false
+        WHERE id = {answer_id}
+    """
+    cursor.execute(query)

@@ -25,7 +25,69 @@
         </tr>
         {% endfor %}
     </table>
-    <table>
-        
+    <br>
+    <br>
+    <table align="center">
+        <tr align="center">
+            <th>Question id</th>
+            <th>Title</th>
+            <th>Submission time</th>
+            <th>View number</th>
+            <th>Vote number</th>
+        </tr>
+        {% for question in questions %}
+        <tr>
+            <td align="center">{{ question.id }}</td>
+            <td align="center">{{ question.title }}</td>
+            <td align="center">{{ question.submission_time }}</td>
+            <td align="center">{{ question.view_number }}</td>
+            <td align="center">{{ question.vote_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <table align="center">
+        <tr align="center">
+            <th>Answer id</th>
+            <th>Question id</th>
+            <th>Message</th>
+            <th>Submission time</th>
+            <th>Vote number</th>
+        </tr>
+        {% for answer in answers %}
+        <tr>
+            <td align="center">{{ answer.id }}</td>
+            <td align="center">{{ answer.question_id }}</td>
+            <td align="center">{{ answer.message }}</td>
+            <td align="center">{{ answer.submission_time }}</td>
+            <td align="center">{{ answer.vote_number }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <table align="center">
+        <tr align="center">
+            <th>Comment id</th>
+            <th>Answer id</th>
+            <th>Question id</th>
+            <th>Message</th>
+            <th>Submission time</th>
+            <th>Edited count</th>
+        </tr>
+        {% for comment in comments %}
+        <tr>
+            <td align="center">{{ comment.id }}</td>
+            <td align="center">{{ comment.answer_id }}</td>
+            <td align="center">{{ comment.question_id }}</td>
+            <td align="center">{{ comment.message }}</td>
+            <td align="center">{{ comment.submission_time }}</td>
+            <td align="center">{{ comment.edited_count }}</td>
+        </tr>
+        {% endfor %}
+        <tr align="center">
+            <td><a href="/">Back</a></td>
+        </tr>
     </table>
 {% endblock %}

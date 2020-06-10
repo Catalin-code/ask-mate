@@ -114,20 +114,21 @@ class __Data:
             # return data
 
         @staticmethod
-        def add(question_id: int, message, image, user_id):
+        def add(question_id: int, message, image, user_id, accepted=False):
             cursor = connection.get_cursor()
             cursor.execute("SELECT nextval('answer_id_seq')")
             id = cursor.fetchall()[0]['nextval']
             query = """
-                INSERT INTO answer(id, submission_time, vote_number, question_id, message, image, user_id)
-                VALUES ({id}, '{time}', 0, {question}, '{message}', '{image}', '{user_id}')
+                INSERT INTO answer(id, submission_time, vote_number, question_id, message, image, user_id, accepted)
+                VALUES ({id}, '{time}', 0, {question}, '{message}', '{image}', '{user_id}', {accepted})
             """.format(
                 id=id,
                 time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 question=question_id,  # TODO
                 message=message,
                 image=f"answer_{id}.{image}" if image else '',
-                user_id=user_id
+                user_id=user_id,
+                accepted=accepted
             )
             cursor.execute(query)
             query_for_answer_count = f"""
