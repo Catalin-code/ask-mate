@@ -1,92 +1,80 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Ask Mate</title>
+{% extends 'layout.html' %}
+    {% block head %}
+    <h1 align="center">Ask Mate</h1>
+    {% endblock %}
 
-        <style>
-            body{
-                background-color: gray;
-                color: navy;
-            }
-            th{
-                border-width: 0px;
-                border-bottom-width: 3px;
-                border-bottom-color: royalblue;
-                border-style: solid;
-            }
-        </style>
-    </head>
-    <body
-        ><h1>Ask Mate</h1>
-        <form action="{{ url_for('route_ask') }}" method="get" style="display: inline;">
-            <button type="submit">Ask Question</button>
-        </form>
-        <form action="{{ url_for('route_list') }}" method="get" style="display: inline;">
-            <button type="submit">View All Questions</button>
-        </form>
-        <form action="{{ url_for('route_search') }}" method="get" style="display: inline;">
-            <input type="text" name="q" id="search_input" placeholder="search" required>
-            <button type="submit">Send</button>
-        </form>
-        <table>
+    {% block body %}
+    <form action="{{ url_for('route_ask') }}" method="get" style="display: inline;">
+        <button type="submit" class="btn abc">Ask Question</button>
+    </form>
+    <form action="{{ url_for('route_list') }}" method="get" style="display: inline;">
+        <button type="submit" class="btn abc">View All Questions</button>
+    </form>
+    <form action="{{ url_for('route_search') }}" method="get" style="display: inline;">
+        <input type="text" class="form-control" name="q" id="search_input" placeholder="search" required>
+        <button type="submit" class="btn abc">Send</button>
+    </form>
+    <table class="center">
+        <tr>
+            {% if sort_key == 'id' and sort_order == 'asc' %}
+                <th><a href="{{ url_for('route_index', order_by='id', order_direction='desc') }}">Id</a></th>
+            {% else %}
+                <th><a href="{{ url_for('route_index', order_by='id', order_direction='asc') }}">Id</a></th>
+            {% endif %}
+            {% if sort_key == 'title' and sort_order == 'asc' %}
+                <th><a href="{{ url_for('route_index', order_by='title', order_direction='desc') }}">Title</a></th>
+            {% else %}
+                <th><a href="{{ url_for('route_index', order_by='title', order_direction='asc') }}">Title</a></th>
+            {% endif %}
+            {% if sort_key == 'submission_time' and sort_order == 'asc' %}
+                <th><a href="{{ url_for('route_index', order_by='submission_time', order_direction='desc') }}">Submission Time</a></th>
+            {% else %}
+                <th><a href="{{ url_for('route_index', order_by='submission_time', order_direction='asc') }}">Submission Time</a></th>
+            {% endif %}
+            {% if sort_key == 'view_number' and sort_order == 'asc' %}
+                <th><a href="{{ url_for('route_index', order_by='view_number', order_direction='desc') }}">View Number</a></th>
+            {% else %}
+                <th><a href="{{ url_for('route_index', order_by='view_number', order_direction='asc') }}">View Number</a></th>
+            {% endif %}
+            {% if sort_key == 'vote_number' and sort_order == 'asc' %}
+                <th><a href="{{ url_for('route_index', order_by='vote_number', order_direction='desc') }}">Vote Number</a></th>
+            {% else %}
+                <th><a href="{{ url_for('route_index', order_by='vote_number', order_direction='asc') }}">Vote Number</a></th>
+            {% endif %}
+            <th>Message</th>
+            <th>Image</th>
+        </tr>
+        {% for question in questions %}
             <tr>
-                {% if sort_key == 'id' and sort_order == 'asc' %}
-                    <th><a href="{{ url_for('route_index', order_by='id', order_direction='desc') }}">Id</a></th>
-                {% else %}
-                    <th><a href="{{ url_for('route_index', order_by='id', order_direction='asc') }}">Id</a></th>
-                {% endif %}
-                {% if sort_key == 'title' and sort_order == 'asc' %}
-                    <th><a href="{{ url_for('route_index', order_by='title', order_direction='desc') }}">Title</a></th>
-                {% else %}
-                    <th><a href="{{ url_for('route_index', order_by='title', order_direction='asc') }}">Title</a></th>
-                {% endif %}
-                {% if sort_key == 'submission_time' and sort_order == 'asc' %}
-                    <th><a href="{{ url_for('route_index', order_by='submission_time', order_direction='desc') }}">Submission Time</a></th>
-                {% else %}
-                    <th><a href="{{ url_for('route_index', order_by='submission_time', order_direction='asc') }}">Submission Time</a></th>
-                {% endif %}
-                {% if sort_key == 'view_number' and sort_order == 'asc' %}
-                    <th><a href="{{ url_for('route_index', order_by='view_number', order_direction='desc') }}">View Number</a></th>
-                {% else %}
-                    <th><a href="{{ url_for('route_index', order_by='view_number', order_direction='asc') }}">View Number</a></th>
-                {% endif %}
-                {% if sort_key == 'vote_number' and sort_order == 'asc' %}
-                    <th><a href="{{ url_for('route_index', order_by='vote_number', order_direction='desc') }}">Vote Number</a></th>
-                {% else %}
-                    <th><a href="{{ url_for('route_index', order_by='vote_number', order_direction='asc') }}">Vote Number</a></th>
-                {% endif %}
-                <th>Message</th>
-                <th>Image</th>
+                <td>{{ question.id }}</td>
+                <td><a href="{{ url_for('route_question', id=question.id) }}">{{ question.title }}</a></td>
+                <td>{{ question.submission_time }}</td>
+                <td>{{ question.view_number }}</td>
+                <td>{{ question.vote_number }}</td>
+                <td>{{ question.message }}</td>
+                <td>{% if question.image %}<img src="{{ url_for('route_image', name=question.image) }}", width="100px">{% endif %}</td>
+                <td>
+                    <form method="get" action="{{ url_for('route_question_vote_up', id=question.id) }}">
+                        <button type="submit">&uarr;</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="get" action="{{ url_for('route_question_vote_down', id=question.id) }}">
+                        <button type="submit">&darr;</button>
+                    </form>
+                </td>
             </tr>
-            {% for question in questions %}
-                <tr>
-                    <td>{{ question.id }}</td>
-                    <td><a href="{{ url_for('route_question', id=question.id) }}">{{ question.title }}</a></td>
-                    <td>{{ question.submission_time }}</td>
-                    <td>{{ question.view_number }}</td>
-                    <td>{{ question.vote_number }}</td>
-                    <td>{{ question.message }}</td>
-                    <td>{% if question.image %}<img src="{{ url_for('route_image', name=question.image) }}", width="100px">{% endif %}</td>
-                    <td>
-                        <form method="get" action="{{ url_for('route_question_vote_up', id=question.id) }}">
-                            <button type="submit">&uarr;</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form method="get" action="{{ url_for('route_question_vote_down', id=question.id) }}">
-                            <button type="submit">&darr;</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <br>
-        <a href="{{ url_for('route_register') }}">Register</a><br>
-        <a href="{{ url_for('route_login') }}">Login</a>
-        <a href="{{ url_for('route_logout') }}">Logout</a>
-        <a href="{{ url_for('route_users') }}">List Users</a>
-        <a href="{{ url_for('route_user', user_id=user_id) }}">Profile</a>
-        <a href="{{ url_for('route_tags') }}">Tags</a>
-    </body>
-</html>
+        {% endfor %}
+    </table>
+    <br>
+    <div class="trb">
+        <a href="{{ url_for('route_register') }}" class="btn abc">Register</a>
+        <a href="{{ url_for('route_login') }}" class="btn abc">Login</a>
+        <a href="{{ url_for('route_logout') }}" class="btn abc">Logout</a>
+    </div> 
+    <div class="tlb">
+        <a href="{{ url_for('route_user', user_id=user_id) }}" class="btn abc">Profile</a>
+        <a href="{{ url_for('route_users') }}" class="btn abc">List Users</a>
+        <a href="{{ url_for('route_tags') }}" class="btn abc">Tags</a>
+    </div>
+    {% endblock body %}
