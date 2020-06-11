@@ -3,15 +3,18 @@
     <title>Tags</title>
 {% endblock %}
 {% block body %}
-    <table align="center">
+    <table class="center" align="center">
+        <tr>
+            <th>Tags</th>
+        </tr>
         </tr>
         {% for tag in tags %}
         <tr>
-            <td align="center">{{ tag.name }}</td>
+            <td align="center"><b>{{ tag.name }}</b></td>
         </tr>
         {% endfor %}
         <tr align="center">
-            <td><a href="/">Back</a></td>
+            <td class="tlb"><a href="/" class="btn abc">Back</a></td>
         </tr>
     </table>
 {% endblock %}

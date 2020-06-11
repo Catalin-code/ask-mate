@@ -55,12 +55,12 @@
                 <td>{% if question.image %}<img src="{{ url_for('route_image', name=question.image) }}", width="100px">{% endif %}</td>
                 <td>
                     <form method="get" action="{{ url_for('route_question_vote_up', id=question.id) }}">
-                        <button type="submit">&uarr;</button>
+                        <button type="submit" class="btn abc">&uarr;</button>
                     </form>
                 </td>
                 <td>
                     <form method="get" action="{{ url_for('route_question_vote_down', id=question.id) }}">
-                        <button type="submit">&darr;</button>
+                        <button type="submit" class="btn abc">&darr;</button>
                     </form>
                 </td>
             </tr>
@@ -68,9 +68,14 @@
     </table>
     <br>
     <div class="trb">
-        <a href="{{ url_for('route_register') }}" class="btn abc">Register</a>
-        <a href="{{ url_for('route_login') }}" class="btn abc">Login</a>
-        <a href="{{ url_for('route_logout') }}" class="btn abc">Logout</a>
+        {% if session['user_id'] %}
+            <a href="{{ url_for('route_logout') }}" class="btn abc">Logout</a>
+        {% else %}
+            <a href="{{ url_for('route_register') }}" class="btn abc">Register</a>
+            <a href="{{ url_for('route_login') }}" class="btn abc">Login</a>
+        {% endif %}
+        
+        
     </div> 
     <div class="tlb">
         <a href="{{ url_for('route_user', user_id=user_id) }}" class="btn abc">Profile</a>

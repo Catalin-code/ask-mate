@@ -1,10 +1,12 @@
-{% extends 'comment.html' %}
-{% block content %}
+{% extends 'layout.html' %}
+{% block body %}
     <h1>Edit the comment:</h1>
     <form id="comment_form" action="{{ url_for('route_edit_comment', id=comment.id) }}" method="POST">
         <label for="comment_input">Comment:</label><br>
         <textarea name="comment" id="comment_input" rows="10" cols="100">{{ comment.message }}</textarea><br>
-        <input type="submit" value="Submit"><br>
+        <input type="submit" value="Submit" class="btn abc"><br>
     </form>
-    <a href="{{ url_for('route_question', id=question_id) }}">Cancel</a>
+    <div class="tlb">
+        <a href="{{ url_for('route_question', id=question_id) }}" class="btn abc">Cancel</a>
+    </div>
 {% endblock %}

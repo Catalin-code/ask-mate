@@ -5,10 +5,14 @@
 {% block body %}
     <div align="center">
         <form method='post'>
+            <label for="email"><b>E-mail:</b></label>
             <input type="email" name='username'><br>
-            <input type="password" name='password'><br>
-            <button type="submit" class="btn btn-dark">Submit</button><br>
+            <label for="password"><b>Pasword:</b></label>
+            <input type="password" name='password' style="margin-right: 20px;"><br>
+            <button type="submit" class="btn abc" style="margin-left: 54px;">Submit</button><br>
         </form>
-        <a href="{{ url_for('route_register') }}">Register</a><br>
+        <div class="trb" >
+            <a href="{{ url_for('route_register') }}" class="btn abc">Register</a><br>
+        </div>
     </div>
 {% endblock %}

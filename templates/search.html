@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
+{% extends 'layout.html' %}
+    {% block head %}
         <meta charset="UTF-8">
         <title>Search Results | Ask Mate</title>
+    {% endblock head %}
 
-        <style>
-            body{
-                background-color: gray;
-                color: navy;
-            }
-        </style>
-    </head>
-    <body>
-
+    {% block body %}
         <meta id='search-phrase' data-phrase="{{ q }}">
         <script>
             function highlight(phrase) {
@@ -23,7 +15,7 @@
             highlight(phrase);
         </script>
         <h1>Search Results</h1>
-        <h2>Questions</h2>
+        <h2>Questions:</h2>
         <table>
             {% for question in questions %}
                 <tr>
@@ -33,7 +25,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <h2>Answers</h2>
+        <h2>Answers:</h2>
         <table>
             {% for answer in answers %}
                 <tr>
@@ -44,10 +36,9 @@
         </table>
 
         <form action="{{ url_for('route_list') }}" style="display: inline;">
-            <button type="submit">All Questions</button>
+            <button type="submit" class="btn abc">All Questions</button>
         </form>
-        <form action="{{ url_for('route_index') }}" style="display: inline;">
-            <button type="submit">Back to Home</button>
+        <form class="tlb" action="{{ url_for('route_index') }}" style="display: inline;">
+            <button type="submit" class="btn abc">Back to Home</button>
         </form>
-    </body>
-</html>
+    {% endblock body %}

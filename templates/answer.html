@@ -1,25 +1,23 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Add answer | Ask Mate</title>
+{% extends 'layout.html' %}
+{% block head %}
+    <meta charset="UTF-8">
+    <title>Add answer | Ask Mate</title>
+{% endblock head %}
 
-        <style>
-            body{
-                background-color: gray;
-                color: navy;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Add a new answer for: {{ question.name }}</h1>
-        <form id="answer_form" action="{{ url_for('route_post_answer', question_id=question.id) }}" method="POST" enctype="multipart/form-data">
-            <label for="answer_input">Answer:</label><br>
-            <textarea name="answer" id="answer_input" rows="10" cols="100" placeholder="Type your answer here."></textarea><br>
-            <label for="image_input">Image</label><br>
-            <input type="file" name="image" id="image_input" accept="image/png, image/jpg, image/jpeg"><br>
-            <input type="submit" value="Submit"><br>
-        </form>
-        <a href="{{ url_for('route_question', id=question.id) }}">Cancel</a>
-    </body>
-</html>
+{% block body %}
+    <h1>Add a new answer for: {{ question.name }}</h1>
+    <form id="answer_form" action="{{ url_for('route_post_answer', question_id=question.id) }}" method="POST" enctype="multipart/form-data">
+        <label for="answer_input">Answer:</label><br>
+        <textarea name="answer" id="answer_input" rows="10" cols="100" placeholder="Type your answer here."></textarea><br>
+        <br>
+        <label for="image_input" style="margin-left: 120px;">Image:</label>
+        <input type="file" name="image" id="image_input" accept="image/png, image/jpg, image/jpeg" style="margin-left: 30px;"><br>
+        <br>
+        <input type="submit" value="Submit" class="btn abc"><br>
+    </form>
+    <div class="tlb">
+        <a href="{{ url_for('route_question', id=question.id) }}" class="btn abc">Cancel</a>
+    </div>
+{% endblock body %}
+        
+        

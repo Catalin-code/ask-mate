@@ -1,9 +1,10 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <title>List Users</title>
+    <title>Profile | Ask Mate</title>
 {% endblock %}
 {% block body %}
-    <table align="center">
+
+    <table class="center" align="center">
         <tr align="center">
         <th>User id</th>
         <th>User name</th>
@@ -27,7 +28,7 @@
     </table>
     <br>
     <br>
-    <table align="center">
+    <table class="center" align="center">
         <tr align="center">
             <th>Question id</th>
             <th>Title</th>
@@ -47,7 +48,7 @@
     </table>
     <br>
     <br>
-    <table align="center">
+    <table class="center" align="center">
         <tr align="center">
             <th>Answer id</th>
             <th>Question id</th>
@@ -67,7 +68,7 @@
     </table>
     <br>
     <br>
-    <table align="center">
+    <table class="center" align="center">
         <tr align="center">
             <th>Comment id</th>
             <th>Answer id</th>
@@ -87,7 +88,7 @@
         </tr>
         {% endfor %}
         <tr align="center">
-            <td><a href="/">Back</a></td>
+            <td class="tlb"><a href="/" class="btn abc">Back</a></td>
         </tr>
     </table>
 {% endblock %}

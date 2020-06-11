@@ -210,14 +210,16 @@ def route_answer_comment(id):
     answer = Data.Answer.get(key='id', value=id)
     if request.method == 'POST':
         comment = request.form.get('comment')
-        Data.Comment.add(comment, answer_id=id)
+        user_id = session['user_id']
+        Data.Comment.add(comment, user_id, answer_id=id)
         return redirect(url_for('route_question', id=answer['question_id']))
     return render_template('comment-answer.html', answer=answer)
 
 
 @app.route('/answer/<int:answer_id>/edit', methods=['GET', 'POST'])
 def route_edit_answer(answer_id):
-    answer = Data.Answer.get(key='id', value=answer_id)[0]
+    answer = Data.Answer.get(key='id', value=answer_id)
+    print(answer)
     if request.method == 'POST':
         message = request.form.get('message')
         Data.Answer.update(answer_id, message=message)

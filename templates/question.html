@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html>
-    <head>
+{% extends 'layout.html' %}
+    {% block head %}
         <meta charset="UTF-8">
         <title>Question {{ question.id }} | Ask Mate</title>
-
-        <style>
-            body{
-                background-color: gray;
-                color: navy;
-            }
-        </style>
-    </head>
-    <body>
+    {% endblock head %}
+    {% block body %}
         <h1>Title: {{ question.title }}</h1>
         <h2>Message:</h2>
         <p>{{ question.message }}</p>
@@ -23,10 +15,10 @@
 
 
         <form action="{{ url_for('route_question_edit', id=question.id) }}" method="get" style="display: inline;">
-            <button type="submit">Edit</button>
+            <button type="submit" class="btn abc">Edit</button>
         </form>
         <form action="{{ url_for('route_question_delete', id=question.id) }}" method="get" style="display: inline;">
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn abc">Delete</button>
         </form><br>
 
 
@@ -37,14 +29,14 @@
                 <option value={{tag.id}}>{{ tag.name }}</option>
                 {% endfor %}
             </select>
-            <button type="submit" value="add" name='type'>Add tag</button>
+            <button type="submit" value="add" name='type' class="btn abc">Add tag</button>
         </form>
         <form action="{{ url_for('route_new_tag', id=question.id) }}" method="POST" style="display: inline;">
             <input type="text" name="new_tag">
-            <button type="submit" value='new' name='type'>New tag</button>
+            <button type="submit" value='new' name='type' class="btn abc">New tag</button>
         </form><br>
         <div id='tags'>
-            <a href="{{ url_for('route_tags') }}">Tags:</a> 
+            <a href="{{ url_for('route_tags') }}" class="btn abc">Tags</a> 
             {% for tag in question_tags %}
                 {{tag.name}}
                 <a href="{{ url_for('route_delete_tag', id=question.id, tag_id=tag.id) }}">X</a>
@@ -54,19 +46,22 @@
 
         <h3>Comments</h3>
         <form action="{{ url_for('route_question_comment', id=question.id) }}" method="get">
-            <button type="submit">Add comment</button>
+            <button type="submit" class="btn abc">Add comment</button>
         </form>
-        <table>
+        <table class="center">
             {% for comment in comments  %}
+            <tr>
+                <th>Message</th>
+            </tr>
             <tr>
                 <td>{{ comment.message }}<br></td>
                 <td><form action="{{ url_for('route_edit_comment', id=comment.id) }}" method="GET">
-                        <input type="submit" value="Edit">
+                        <input type="submit" value="Edit" class="btn abc">
                     </form>
                 </td>
                 <td>
                     <form action="{{ url_for('route_delete_comment', id=comment.id) }}" method="GET">
-                        <input type="submit" value="Delete">
+                        <input type="submit" value="Delete" class="btn abc">
                     </form>
                 </td>
             </tr>
@@ -76,9 +71,9 @@
 
         <h2>Answers</h2>
         <form action="{{ url_for('route_post_answer', question_id=question.id) }}" method="get">
-            <input type="submit" value="New Answer">
+            <input type="submit" value="New Answer" class="btn abc">
         </form>
-        <table>
+        <table class="center" style="margin-left: 500px;">
             <tr>
                 <th>Votes</th>
                 <th>Message</th>
@@ -93,33 +88,33 @@
                     <td>{{ answer.submission_time }}</td>
                     <td>
                         <form method="get" action="{{ url_for('route_answer_vote_up', id=answer.id) }}" style="display: inline;">
-                            <button type="submit">&uarr;</button>
+                            <button type="submit" class="btn abc">&uarr;</button>
                         </form>
                         <form method="get" action="{{ url_for('route_answer_vote_down', id=answer.id) }}" style="display: inline;">
-                            <button type="submit">&darr;</button>
+                            <button type="submit" class="btn abc">&darr;</button>
 
                         </form>
                     </td>
                     <td>
                         <form action="{{ url_for('route_edit_answer', answer_id=answer.id) }}" method="GET" style="display: inline;">
-                            <input type="submit" value="Edit">
+                            <input type="submit" value="Edit" class="btn abc">
                         </form>
                         <form action="{{ url_for('route_delete_answer', id=answer.id) }}" method="GET" style="display: inline;">
-                            <input type="submit" value="Delete">
+                            <input type="submit" value="Delete" class="btn abc">
                         </form>
                         <form action="{{ url_for('route_answer_comment', id=answer.id) }}" method="GET" style="display: inline;">
-                            <input type="submit" value="Add comment">
+                            <input type="submit" value="Add comment" class="btn abc">
                         </form>
                         {% if session['user_id'] == question.user_id %}
                             {% if answer.accepted == false %}
                                 <form action="{{ url_for('route_accepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
-                                    <input type="submit" value="Accept answer">
+                                    <input type="submit" value="Accept answer" class="btn abc">
                                 </form>
                             {% endif %}
 
                             {% if answer.accepted == true %}
                                 <form action="{{ url_for('route_unaccepted_answer', id=answer.id, question_id=question.id) }}" method="GET" style="display: inline;">
-                                    <input type="submit" value="Unaccept answer">
+                                    <input type="submit" value="Unaccept answer" class="btn abc">
                                 </form>
                             {% endif %}
                         {% else %}
@@ -134,7 +129,7 @@
                 </tr>
                 <tr>
                     <td colspan=5>
-                        <table>
+                        <table class="center">
                         {% for comment in answer_comments[answer.id] %}
                             <tr>
                                 <td>
@@ -142,10 +137,10 @@
                                 </td>
                                 <td>
                                     <form action="{{ url_for('route_edit_comment', id=comment.id) }}" method="GET" style="display: inline;">
-                                        <input type="submit" value="Edit">
+                                        <input type="submit" value="Edit" class="btn abc">
                                     </form>
                                     <form action="{{ url_for('route_delete_comment', id=comment.id) }}" method="GET" style="display: inline;">
-                                        <input type="submit" value="Delete">
+                                        <input type="submit" value="Delete" class="btn abc">
                                     </form>
                                 </td>
                             </tr>
@@ -155,8 +150,7 @@
                 </tr>
             {% endfor %}
         </table>
-        <form action="{{ url_for('route_list') }}" method="get">
-            <button type="submit">Back to list</button>
+        <form class="tlb" action="{{ url_for('route_list') }}" method="get">
+            <button type="submit" class="btn abc">Back to list</button>
         </form>
-    </body>
-</html>
+    {% endblock body  %}

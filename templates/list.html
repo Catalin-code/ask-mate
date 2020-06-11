@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
+{% extends 'layout.html' %}
+    {% block head %}
         <meta charset="UTF-8">
-        <title>Ask Mate</title>
+        <title>All questions | Ask Mate</title>
+    {% endblock head %}
 
-        <style>
-            body{
-                background-color: gray;
-                color: navy;
-            }
-            th{
-                border-width: 0px;
-                border-bottom-width: 3px;
-                border-bottom-color: royalblue;
-                border-style: solid;
-            }
-        </style>
-    </head>
-    <body>
+    {% block body %}
         <h1>Ask Mate</h1>
         <form action="{{ url_for('route_ask') }}" method="get">
-            <button type="submit">Ask Question</button>
+            <button type="submit" class="btn abc">Ask Question</button>
         </form>
-        <table>
+        <table class="center">
             <tr>
                 {% if sort_key == 'id' and sort_order == 'asc' %}
                     <th><a href="{{ url_for('route_list', order_by='id', order_direction='desc') }}">Id</a></th>
@@ -63,19 +50,19 @@
                     <td>{% if question.image %}<img src="{{ url_for('route_image', name=question.image) }}", width="100px">{% endif %}</td>
                     <td>
                         <form method="get" action="{{ url_for('route_question_vote_up', id=question.id) }}">
-                            <button type="submit">&uarr;</button>
+                            <button type="submit" class="btn abc">&uarr;</button>
                         </form>
                     </td>
                     <td>
                         <form method="get" action="{{ url_for('route_question_vote_down', id=question.id) }}">
-                            <button type="submit">&darr;</button>
+                            <button type="submit" class="btn abc">&darr;</button>
                         </form>
                     </td>
                 </tr>
             {% endfor %}
         </table>
-        <form action="{{ url_for('route_index') }}" method="get">
-            <button type="submit">Back to Home</button>
+        <form class="tlb" action="{{ url_for('route_index') }}" method="get">
+            <button type="submit" class="btn abc">Back to Home</button>
         </form>
-    </body>
-</html>
+    {% endblock body %}
+        

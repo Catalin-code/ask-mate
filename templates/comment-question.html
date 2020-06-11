@@ -1,11 +1,13 @@
-{% extends 'comment.html' %}
-{% block content %}
-    <h1>Add a new comment for the question:</h1>
+{% extends 'layout.html' %}
+{% block body %}
+    <h1>Add a new comment for the question</h1>
     <form id="comment_form" action="{{ url_for('route_question_comment', id=question.id) }}" method="POST">
         <label for="comment_input">Comment:</label><br>
         <textarea name="comment" id="comment_input" rows="10" cols="100"
             placeholder="Type your comment here."></textarea><br>
-        <input type="submit" value="Submit"><br>
+        <input type="submit" value="Submit" class="btn abc"><br>
     </form>
-    <a href="{{ url_for('route_question', id=question.id) }}">Cancel</a>
+    <div class="tlb">
+        <a href="{{ url_for('route_question', id=question.id) }}" class="btn abc">Cancel</a>
+    </div>
 {% endblock  %}
