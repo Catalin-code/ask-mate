@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session
 from data_manager import Data
 from werkzeug.utils import secure_filename
-# from util import hash_password, verify_password, add_user
 import util
 import os
 
@@ -297,7 +296,6 @@ def route_login():
 
 @app.route('/logout')
 def route_logout():
-    # remove the username from the session if it's there
     session.pop('username', None)
     return redirect(url_for('route_index'))
 

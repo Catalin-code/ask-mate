@@ -2,16 +2,11 @@ from datetime import datetime
 import connection
 
 
-# Example usage
-# print(Data.Question.get(key='id', value=0))
-
-
 class __Data:
 
     class __Question:
         @staticmethod
         def get(key=None, value=None):
-            # if key is not None return the questions with key == value
             if key in ('id', 'vote_number', 'view_number'):
                 condition = f"{key}={value}"
             else:
@@ -100,7 +95,6 @@ class __Data:
     class __Answer:
         @staticmethod
         def get(key=None, value=None):
-            # if key is not None return the answers with key == value
             if key in ('id', 'vote_number', 'question_id'):
                 condition = f"{key}={value}"
             else:
@@ -117,7 +111,6 @@ class __Data:
             data = cursor.fetchall()
             connection.close_connection(cursor)
             return data[0] if key == 'id' else data
-            # return data
 
         @staticmethod
         def add(question_id: int, message, image, user_id, accepted=False):
