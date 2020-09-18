@@ -6,8 +6,8 @@ connections = {}
 
 
 def get_connection_string():
-    user_name = 'catalin'
-    password = '123456'
+    user_name = 'candre'
+    password = ''
     host = 'localhost'
     database_name = 'test_db'
 

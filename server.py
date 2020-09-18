@@ -308,10 +308,10 @@ def route_user(user_id):
     return render_template('user.html', user_id=user_id, users_list=users_list, questions=questions, answers=answers, comments=comments)
 
 
-@app.route('/answer/<int:id>/accepted')
-def route_accepted_answer(id):
+@app.route('/answer/<int:id>/accepted/<int:question_id>', methods=['GET', 'POST'])
+def route_accepted_answer(id, question_id):
     util.accept_answer(id)
-    return redirect(url_for('route_question', id=id))
+    return redirect(url_for('route_question', id=question_id))
 
 
 if __name__ == "__main__":

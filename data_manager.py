@@ -46,11 +46,7 @@ class __Data:
                 user_id=user_id
             )
             cursor.execute(query)
-            query_for_question_count = f"""
-                UPDATE "user"
-                SET questions = questions + 1
-                WHERE user_id = {user_id}
-                """
+            query_for_question_count = f""" UPDATE "user" SET questions = questions + 1 WHERE user_id = {user_id} """
             cursor.execute(query_for_question_count)
             connection.close_connection(cursor)
             return id
